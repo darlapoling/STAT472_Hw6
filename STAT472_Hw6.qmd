@@ -1,0 +1,41 @@
+---
+title: "STAT472_Hw6"
+author: "Darla Poling"
+date: today
+format: html
+editor: visual
+---
+
+Problem 1.
+
+Use the data in file nhanes (see description and example in chapter 7 slides pages 26-30) for this exercise. The sagittal abdominal diameter (variable bmdavsad), measures the distance from the small of the back to the upper abdomen.
+
+\(a\) Draw a histogram of bmdavsad, using the weights. Do the data appear to be normally distributed?
+
+\(b\) Estimate the mean value of bmdavsad for the domain of adults age 20 and over, along with a 95% CI.
+
+\(c\) Find the minimum, 25th, 50th, and 75th percentiles, and maximum of bmdavsad. Calculate the same quantities separately for each gender (variable riagendr). Use these to construct side-by-side boxplots of the data as in Figure 7.6.
+
+\(d\) Construct a weighted bubble plot with smoothed trend line for y = bmdavsad and x = bmxbmi. Does there appear to be a linear relationship? What other features do you see in the data?
+
+Problem 2.
+
+Kosmin and Lachman (1993) had a question on religious affiliation included in 56 consecutive weekly household surveys; the subject of household surveys varied from week to week from cable TV use, to preference for consumer items, to political issues. After four callbacks, the unit nonresponse rate was 50%; an additional 2.3% refused to an- swer the religion question. The authors say: Nationally, the sheer number of interviews and careful research design resulted in a high level of precision ... Standard error estimates for our overall national sample show that we can be 95% confident that the figures we have obtained have an error margin, plus or minus, of less than 0.2%. This means, for example, that we are more than 95% certain that the figure for Catholics is in the range of 25.0% to 26.4% for the U.S. population ...
+
+\(a\) Critique the preceding statement.
+
+\(b\) If you anticipated item nonresponse, do you think it would be bet- ter to insert the question of interest in different surveys each week, as was done here, or to use the same set of additional questions in each survey? Explain your answer. How would you design an experiment to test your conjecture?
+
+Problem 3. Gnap (1995) conducted a survey on teacher workload which was used in Exercise 15 of Chapter 5.
+
+\(a\) The original survey was intended as a one-stage cluster sample. What was the overall response rate?
+
+\(b\) Would you expect nonresponse bias in this study? If so, in which direction would you expect the bias to be? Which teachers do you think would be less likely to respond to the survey?
+
+\(c\) Gnap also collected data on a random subsample of the nonre- spondents in the “large” stratum, in file teachnr.dat. How do the respondents and nonrespondents differ?
+
+\(d\) Is there evidence of nonresponse bias, when you compare the sub- sample of nonrespondents to the respondents in the original sur- vey?
+
+\(e\) Use an appropriate imputation method for the missing values in teachnr.dat, then calculate the means and variances for the four variables again, compare to the results from (c).
+
+\(f\) Use an appropriate imputation methods for the missing values in teachers.dat, then calculate the means and variances for the four variables again, compare to the results from (c).
