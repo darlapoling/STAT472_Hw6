@@ -124,7 +124,7 @@ In the graph there appears to be a linear relationship with a positive slope. At
 
 In practical terms this may provide evidence that individuals with higher SADs may have a wider range of BMI, and people with a higher BMI may have a wider range of SADS, compared to people with lower values of those variables.
 
-## Problem 2.
+## \*Problem 2.
 
 Kosmin and Lachman (1993) had a question on religious affiliation included in 56 consecutive weekly household surveys; the subject of household surveys varied from week to week from cable TV use, to preference for consumer items, to political issues. After four callbacks, the unit nonresponse rate was 50%; an additional 2.3% refused to answer the religion question. The authors say: Nationally, the sheer number of interviews and careful research design resulted in a high level of precision. Standard error estimates for our overall national sample show that we can be 95% confident that the figures we have obtained have an error margin, plus or minus, of less than 0.2%.
 
@@ -132,15 +132,13 @@ This means, for example, that we are more than 95% certain that the figure for C
 
 \*(a) Critique the preceding statement.
 
-"Standard error estimates for our overall national sample show that we can be 95% confident that the figures we have obtained have an error margin, plus or minus, of less than 0.2%." This is a width of 0.4, the width of the interval given is 26.4-25=1.4. This is much larger than the actual range provided with 95% confidence, so it can't be true.
+"Standard error estimates for our overall national sample show that we can be 95% confident that the figures we have obtained have an error margin, plus or minus, of less than 0.2%." This is a width of 0.4, the width of the interval given is 26.4-25=1.4. This is larger than the actual range provided with 95% confidence, so it can't be true.
 
 \*(b) If you anticipated item nonresponse, do you think it would be better to insert the question of interest in different surveys each week, as was done here, or to use the same set of additional questions in each survey? Explain your answer. How would you design an experiment to test your conjecture?
 
 For this survey, a nonresponse bias might look like the people who are not responding to the survey also being more likely to be atheistic or non-Catholic specifically. Conversely, it may also appear as the opposite, where people who are less likely to respond to the survey are more likely to be religious or Catholic specifically. In either case, this would probably be tied to the high emotions and stakes of religious topics. Because of this, I think it would be best to include the relevant question into different surveys every week. With this method, if anyone is turned off because of the polarizing topic, then there will be a chance that won't happen until the second or third survey they take, increasing the response rate. It may also make them more likely to continue taking surveys because it doesn't focus on the topic of religion specifically.
 
 If I were to design an experiment to test this conjecture, that it would be preferable to include the question only in some surveys, I would focus on getting two groups of individuals that are internally diverse, but are similar to each other between groups. This would suit cluster sampling very well, so it could be based off of natural geographic separations. Then, the two separate methods could be applied to each group and the response rate could be measured and compared.
-
-\np
 
 ## Problem 3.
 
