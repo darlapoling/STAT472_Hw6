@@ -9,14 +9,14 @@ editor: visual
 # Homework 6 STAT 472
 
 ```{r}
-pacman::p_load(survey, weights, SDAResources, nrba)
+pacman::p_load(survey, weights, SDAResources, nrba, dplyr)
 ```
 
-## \*Problem 1.
+## Problem 1.
 
 Use the data in file nhanes (see description and example in chapter 7 slides pages 26-30) for this exercise. The sagittal abdominal diameter (variable bmdavsad), measures the distance from the small of the back to the upper abdomen.
 
-\*(a) Draw a histogram of bmdavsad, using the weights. Do the data appear to be normally distributed?
+\(a\) Draw a histogram of bmdavsad, using the weights. Do the data appear to be normally distributed?
 
 ```{r}
 data(nhanes)
