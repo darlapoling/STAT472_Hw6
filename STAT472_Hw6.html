@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Darla Poling">
-<meta name="dcterms.date" content="2026-04-29">
+<meta name="dcterms.date" content="2026-08-19">
 
 <title>STAT472_Hw6</title>
 <style>
@@ -130,7 +130,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">April 29, 2026</p>
+      <p class="date">August 19, 2026</p>
     </div>
   </div>
   
@@ -142,21 +142,13 @@ window.Quarto = {
 </header>
 
 
-<section id="homework-6-stat-472" class="level1">
-<h1>Homework 6 STAT 472</h1>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(survey, weights, SDAResources, nrba, dplyr)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
+<section id="homework-6-stat-472-sampling-theory-practice" class="level1">
+<h1>Homework 6 STAT 472: Sampling Theory &amp; Practice</h1>
 <section id="problem-1." class="level2">
 <h2 class="anchored" data-anchor-id="problem-1.">Problem 1.</h2>
-<p>Use the data in file nhanes (see description and example in chapter 7 slides pages 26-30) for this exercise. The sagittal abdominal diameter (variable bmdavsad), measures the distance from the small of the back to the upper abdomen.</p>
-<p>(a) Draw a histogram of bmdavsad, using the weights. Do the data appear to be normally distributed?</p>
+<p><strong>Use the data in file nhanes (see description and example in chapter 7 slides pages 26-30) for this exercise. The sagittal abdominal diameter (variable bmdavsad), measures the distance from the small of the back to the upper abdomen.</strong></p>
+<p><strong>(a) Draw a histogram of bmdavsad, using the weights. Do the data appear to be normally distributed?</strong></p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(nhanes)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#hist(nhanes$bmdavsad)</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># x is the data, weight is the vector of weights</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">wtd.hist</span>(nhanes<span class="sc">$</span>bmdavsad, <span class="at">weight =</span> nhanes<span class="sc">$</span>wtint2yr)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -166,26 +158,14 @@ window.Quarto = {
 </div>
 </div>
 <p>Overall, the data appears to be normally distributed. The weighted histogram is slightly right skewed, but overall it is approximately normally distributed.</p>
-<p>*(b) Estimate the mean value of bmdavsad for the domain of adults age 20 and over, along with a 95% CI.</p>
+<p><strong>(b) Estimate the mean value of bmdavsad for the domain of adults age 20 and over, along with a 95% CI.</strong></p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>nhanesnew<span class="ot">&lt;-</span>nhanes <span class="co">#copy nhanes as nhanesnew, since we want to create a new column </span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#dataframe for the domain of adults age 20 and over</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>nhanesnew <span class="ot">&lt;-</span> <span class="fu">subset</span>(nhanesnew, ridageyr <span class="sc">&gt;=</span> <span class="dv">20</span>)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#the following code is from the chapter 7 class notes</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>nhanes<span class="sc">$</span>age20d<span class="ot">&lt;-</span><span class="fu">rep</span>(<span class="dv">0</span>,<span class="fu">nrow</span>(nhanes))</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>nhanes<span class="sc">$</span>age20d[nhanes<span class="sc">$</span>ridageyr <span class="sc">&gt;=</span><span class="dv">20</span> <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(nhanes<span class="sc">$</span>bmxbmi)]<span class="ot">&lt;-</span><span class="dv">1</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># check missing value counts for new variables</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(nhanes<span class="sc">$</span>age20d))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(nhanes<span class="sc">$</span>age20d) <span class="co"># how many records in domain?</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 5406</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(nhanes[, <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, <span class="dv">15</span>, <span class="dv">26</span>)])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 6
   sdmvstra sdmvpsu wtint2yr wtmec2yr bmxbmi age20d
@@ -197,76 +177,34 @@ window.Quarto = {
 5      126       2   17628.   18235.   20.3      1
 6      128       1   11252.   10879.   28.6      1</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># stratified cluster design</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>d0709 <span class="ot">&lt;-</span> <span class="fu">svydesign</span>(<span class="at">id =</span> <span class="sc">~</span>sdmvpsu, <span class="at">strata=</span><span class="sc">~</span>sdmvstra,</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="at">weights=</span><span class="sc">~</span>wtmec2yr, <span class="at">nest=</span><span class="cn">TRUE</span>, <span class="at">data =</span> nhanes)</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># domain estimation, age20+</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>d0709sub<span class="ot">&lt;-</span><span class="fu">subset</span>(d0709, age20d <span class="sc">==</span><span class="dv">1</span>)</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>d0709sub</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Stratified 1 - level Cluster Sampling design (with replacement)
 With (30) clusters.
 subset(d0709, age20d == 1)</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Stratified 1 - level Cluster Sampling design (with replacement)</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="do">## With (30) clusters.</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="do">## subset(d0709, age20d == 1)</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Request means and design effects</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>nhmeans<span class="ot">&lt;-</span><span class="fu">svymean</span>(<span class="sc">~</span>bmxbmi, d0709sub, <span class="at">deff=</span><span class="cn">TRUE</span>)</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="fu">degf</span>(d0709sub)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 15</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 15</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>nhmeans</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>          mean      SE   DEff
 bmxbmi 29.3891  0.2532 7.1248</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="do">## mean SE DEff</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="do">## bmxbmi 29.3891 0.2532 7.1248</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">confint</span>(nhmeans,<span class="at">df=</span><span class="fu">degf</span>(d0709sub))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>          2.5 %   97.5 %
 bmxbmi 28.84942 29.92878</code></pre>
 </div>
 </div>
 <p>The mean BMI for adults aged 20 and over is **29.39**, with a 95% confidence interval of [28.85, 29.93].</p>
-<p>(c) Find the minimum, 25th, 50th, and 75th percentiles, and maximum of bmdavsad. Calculate the same quantities separately for each gender (variable riagendr). Use these to construct side-by-side boxplots of the data as in Figure 7.6.</p>
+<p><strong>(c) Find the minimum, 25th, 50th, and 75th percentiles, and maximum of bmdavsad. Calculate the same quantities separately for each gender (variable riagendr). Use these to construct side-by-side boxplots of the data as in Figure 7.6.</strong></p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Source - https://stackoverflow.com/a/21219821</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Posted by Roman Luštrik</span></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Retrieved 2026-04-28, License - CC BY-SA 3.0</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Omit missing values of bmxbmi</span></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>nhanes <span class="ot">&lt;-</span> <span class="fu">subset</span>(nhanes, <span class="sc">!</span><span class="fu">is.na</span>(bmdavsad))</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="co">#Filter nhanes by female gender and calculate percentiles of bmdavsad</span></span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>nhanesf <span class="ot">&lt;-</span> nhanes</span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>nhanesf <span class="ot">&lt;-</span> <span class="fu">subset</span>(nhanesf, riagendr <span class="sc">==</span> <span class="dv">2</span>)</span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(nhanesf<span class="sc">$</span>bmdavsad, <span class="at">probs =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>, <span class="dv">1</span>)) <span class="co"># quartile</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  0%  25%  50%  75% 100% 
  9.6 17.1 20.4 24.3 39.7 </code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Filter nhanes by male gender and calculate percentiles of bmdavsad</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>nhanesm <span class="ot">&lt;-</span> nhanes</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>nhanesm <span class="ot">&lt;-</span> <span class="fu">subset</span>(nhanesm, riagendr <span class="sc">==</span> <span class="dv">1</span>)</span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(nhanesm<span class="sc">$</span>bmdavsad, <span class="at">probs =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>, <span class="dv">1</span>)) <span class="co"># quartile</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  0%  25%  50%  75% 100% 
 10.8 17.9 21.3 24.9 40.8 </code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a> nhanes<span class="sc">$</span>riagendr <span class="ot">&lt;-</span> <span class="fu">factor</span>(nhanes<span class="sc">$</span>riagendr)</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co">#side-by-side boxplots of the data</span></span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(nhanes<span class="sc">$</span>bmdavsad <span class="sc">~</span> nhanes<span class="sc">$</span>riagendr,</span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">col=</span><span class="st">'steelblue'</span>,</span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">main=</span><span class="st">'Average Sagittal Abdominal Diameter by Gender'</span>,</span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">xlab=</span><span class="st">'Dender'</span>,</span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylab=</span><span class="st">'Average Sagittal Abdominal Diameter'</span>,</span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">names =</span> <span class="fu">c</span>(<span class="st">"Male"</span>, <span class="st">"Female"</span>)) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -276,22 +214,8 @@ bmxbmi 28.84942 29.92878</code></pre>
 </div>
 </div>
 <p>The boxplots demonstrate evidence that female individuals tend to have very slightly lower average saggital abdominal diameters compared to male individuals, but the range and mean are extremely similar overall.</p>
-<p>(d) Construct a weighted bubble plot with smoothed trend line for y = bmdavsad and x = bmxbmi. Does there appear to be a linear relationship? What other features do you see in the data?</p>
+<p><strong>(d) Construct a weighted bubble plot with smoothed trend line for y = bmdavsad and x = bmxbmi. Does there appear to be a linear relationship? What other features do you see in the data?</strong></p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The following code is from chapter 7 class notes</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="do">### Smoothed trend line for mean</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Smoothed trend line with bubble plot of BMI versus age</span></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co"># plot data bmxbmi~ridageyr</span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">las=</span><span class="dv">1</span>) <span class="co"># make tick mark labels horizontal</span></span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="fu">svyplot</span>(bmdavsad<span class="sc">~</span>bmxbmi, <span class="at">design=</span>d0709, <span class="at">style=</span><span class="st">"bubble"</span>,</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="at">basecol=</span><span class="st">"gray"</span>,<span class="at">inches=</span><span class="fl">0.03</span>,</span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="at">ylab=</span><span class="st">"Average Sagittal Abdominal Diameter"</span>,<span class="at">xlab=</span><span class="st">"Body Mass Index"</span>,</span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">10</span>,<span class="dv">70</span>),<span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">50</span>),</span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="at">main=</span><span class="st">"Smoothed trend line with bubble plot of BMI versus age"</span>)</span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="co"># plot smoothing trend line</span></span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a><span class="co"># library(KernSmooth) # install and load the package</span></span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>smth<span class="ot">&lt;-</span><span class="fu">svysmooth</span>(bmdavsad<span class="sc">~</span>bmxbmi,d0709)</span>
-<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(smth,<span class="at">lwd=</span><span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -305,45 +229,26 @@ bmxbmi 28.84942 29.92878</code></pre>
 </section>
 <section id="problem-2." class="level2">
 <h2 class="anchored" data-anchor-id="problem-2.">Problem 2.</h2>
-<p>Kosmin and Lachman (1993) had a question on religious affiliation included in 56 consecutive weekly household surveys; the subject of household surveys varied from week to week from cable TV use, to preference for consumer items, to political issues. After four callbacks, the unit nonresponse rate was 50%; an additional 2.3% refused to answer the religion question. The authors say: Nationally, the sheer number of interviews and careful research design resulted in a high level of precision. Standard error estimates for our overall national sample show that we can be 95% confident that the figures we have obtained have an error margin, plus or minus, of less than 0.2%.</p>
-<p>This means, for example, that we are more than 95% certain that the figure for Catholics is in the range of 25.0% to 26.4% for the U.S. population …</p>
-<p>(a) Critique the preceding statement.</p>
+<p><strong>Kosmin and Lachman (1993) had a question on religious affiliation included in 56 consecutive weekly household surveys; the subject of household surveys varied from week to week from cable TV use, to preference for consumer items, to political issues. After four callbacks, the unit nonresponse rate was 50%; an additional 2.3% refused to answer the religion question. The authors say: Nationally, the sheer number of interviews and careful research design resulted in a high level of precision. Standard error estimates for our overall national sample show that we can be 95% confident that the figures we have obtained have an error margin, plus or minus, of less than 0.2%.</strong></p>
+<p><strong>This means, for example, that we are more than 95% certain that the figure for Catholics is in the range of 25.0% to 26.4% for the U.S. population …</strong></p>
+<p><strong>(a) Critique the preceding statement.</strong></p>
 <p>“Standard error estimates for our overall national sample show that we can be 95% confident that the figures we have obtained have an error margin, plus or minus, of less than 0.2%.” This is a width of 0.4, the width of the interval given is 26.4-25=1.4. This is larger than the actual range provided with 95% confidence, so it can’t be true.</p>
-<p>(b) If you anticipated item nonresponse, do you think it would be better to insert the question of interest in different surveys each week, as was done here, or to use the same set of additional questions in each survey? Explain your answer. How would you design an experiment to test your conjecture?</p>
+<p><strong>(b) If you anticipated item nonresponse, do you think it would be better to insert the question of interest in different surveys each week, as was done here, or to use the same set of additional questions in each survey? Explain your answer. How would you design an experiment to test your conjecture?</strong></p>
 <p>For this survey, a nonresponse bias might look like the people who are not responding to the survey also being more likely to be atheistic or non-Catholic specifically. Conversely, it may also appear as the opposite, where people who are less likely to respond to the survey are more likely to be religious or Catholic specifically. In either case, this would probably be tied to the high emotions and stakes of religious topics. Because of this, I think it would be best to include the relevant question into different surveys every week. With this method, if anyone is turned off because of the polarizing topic, then there will be a chance that won’t happen until the second or third survey they take, increasing the response rate. It may also make them more likely to continue taking surveys because it doesn’t focus on the topic of religion specifically.</p>
 <p>If I were to design an experiment to test this conjecture, that it would be preferable to include the question only in some surveys, I would focus on getting two groups of individuals that are internally diverse, but are similar to each other between groups. This would suit cluster sampling very well, so it could be based off of natural geographic separations. Then, the two separate methods could be applied to each group and the response rate could be measured and compared. Additionally, I would make sure to conduct the survey through in-person method rather than over the phone, as this can increase response rates.</p>
 </section>
 <section id="problem-3." class="level2">
 <h2 class="anchored" data-anchor-id="problem-3.">Problem 3.</h2>
-<p>Gnap (1995) conducted a survey on teacher workload which was used in Exercise 15 of Chapter 5.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>teachers <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"~/Downloads/CSV data sets for SDA 3e/teachers.csv"</span>, <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">","</span>) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>(a) The original survey was intended as a one-stage cluster sample. What was the overall response rate?</p>
+<p><strong>Gnap (1995) conducted a survey on teacher workload which was used in Exercise 15 of Chapter 5.</strong></p>
+<p><strong>(a) The original survey was intended as a one-stage cluster sample. What was the overall response rate?</strong></p>
 <p>The nonresponse rate rate is: <span class="math inline">\(\text{nonresponse}=\frac{\text{nonrespondents+unresolved}}{\text{N-ineligible}}\)</span>. The response rate will be 100% minus this value.</p>
 <p>The denominator is the number of individuals who were eligible for the study, minus any ineligible cases, 310+26=336. This is the number of respondents plus the number of nonrespondents. The numerator is the number of nonrespondents plus the number of results in the respondents that have no information and unresolved cases, 26+4=30. This is the number of nonrespondents plus the number of respondents whose values are NA.</p>
 <p>The final formula for the nonresponse rate is: <span class="math inline">\(\text{nonresponse}=\frac{30}{336}=0.08929\approx8.9\%\)</span>.</p>
 <p>Consequently, the response rate will be: <span class="math inline">\(100\%-8.9\%=91\%\)</span></p>
-<p>(b) Would you expect nonresponse bias in this study? If so, in which direction would you expect the bias to be? Which teachers do you think would be less likely to respond to the survey?</p>
+<p>(<strong>b) Would you expect nonresponse bias in this study? If so, in which direction would you expect the bias to be? Which teachers do you think would be less likely to respond to the survey?</strong></p>
 <p>Nonresponse bias occurs when the individuals who don’t respond to the survey are systemically different from the respondents. Teachers might be less likely to response to the survey if they have a particularly high workload, if they are stressed out, or if they have other personal or medical issues. The nonresponse may be a direct result of the nonrespondent’s higher workload, or it may be due to related factors. Specifically, if a teacher has only a slightly higher than average workload but they also have personal problems that overall higher effort they’re putting into their life may prevent them from submitting the survey, so overall teachers with higher than average workloads may tend to not respond. Therefore, I expect there to be a nonresponse bias, specifically one that tend to systemically weed out teachers with higher workloads, skewing the data to make it seem like the average workload of a teacher is lower than it actually is.</p>
-<p>(c) Gnap also collected data on a random subsample of the nonrespondents in the “large” stratum, in file teachnr.dat. How do the respondents and nonrespondents differ?</p>
+<p><strong>(c) Gnap also collected data on a random subsample of the nonrespondents in the “large” stratum, in file teachnr.dat. How do the respondents and nonrespondents differ?</strong></p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>teachnr <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"~/Downloads/CSV data sets for SDA 3e/teachnr.csv"</span>, <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">","</span>)</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>comb.data <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(teachers,teachnr)</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>comb.data<span class="sc">$</span>response <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>,<span class="fu">nrow</span>(comb.data))</span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>comb.data<span class="sc">$</span>response[<span class="sc">!</span><span class="fu">is.na</span>(comb.data<span class="sc">$</span>dist)] <span class="ot">&lt;-</span> <span class="dv">1</span>  </span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert numeric codes (e.g., 1, 2) to a factor with labels</span></span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>comb.data<span class="sc">$</span>response <span class="ot">&lt;-</span> <span class="fu">factor</span>(comb.data<span class="sc">$</span>response,</span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>),     </span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Respondent"</span>, <span class="st">"Nonrespondent"</span>)) </span>
-<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Histograms of the data for each dataset, the respondents and nonrespondents</span></span>
-<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
-<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachers<span class="sc">$</span>hrwork, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">60</span>))</span>
-<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachnr<span class="sc">$</span>hrwork, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">60</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -351,9 +256,6 @@ bmxbmi 28.84942 29.92878</code></pre>
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachers<span class="sc">$</span>preprmin, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">200</span>, <span class="dv">1000</span>))</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachnr<span class="sc">$</span>preprmin, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">200</span>, <span class="dv">1000</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -361,9 +263,6 @@ bmxbmi 28.84942 29.92878</code></pre>
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachers<span class="sc">$</span>size, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">120</span>))</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachnr<span class="sc">$</span>size, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">120</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -371,9 +270,6 @@ bmxbmi 28.84942 29.92878</code></pre>
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachers<span class="sc">$</span>assist, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">500</span>, <span class="dv">2000</span>))</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachnr<span class="sc">$</span>assist, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">500</span>, <span class="dv">2000</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -381,10 +277,6 @@ bmxbmi 28.84942 29.92878</code></pre>
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a contingency table</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>contingency_table <span class="ot">&lt;-</span> <span class="fu">table</span>(comb.data<span class="sc">$</span>response, comb.data<span class="sc">$</span>size)</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform the Chi-Square test</span></span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(contingency_table)   </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning in chisq.test(contingency_table): Chi-squared approximation may be
 incorrect</code></pre>
@@ -396,8 +288,268 @@ incorrect</code></pre>
 data:  contingency_table
 X-squared = 49.61, df = 28, p-value = 0.007146</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use Fisher's test for small samples</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fisher.test</span>(comb.data<span class="sc">$</span>response, comb.data<span class="sc">$</span>size, <span class="at">simulate.p.value=</span><span class="cn">TRUE</span>)   </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Fisher's Exact Test for Count Data with simulated p-value (based on
+    2000 replicates)
+
+data:  comb.data$response and comb.data$size
+p-value = 0.009995
+alternative hypothesis: two.sided</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in chisq.test(contingency_table): Chi-squared approximation may be
+incorrect</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Pearson's Chi-squared test
+
+data:  contingency_table
+X-squared = 94.165, df = 48, p-value = 7.799e-05</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in chisq.test(contingency_table): Chi-squared approximation may be
+incorrect</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Pearson's Chi-squared test
+
+data:  contingency_table
+X-squared = 67.557, df = 36, p-value = 0.001119</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 24.57742</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 104.0571</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 23.61538</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 68.96615</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 163.4226</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 14000.62</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 160.1923</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3436.962</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 34.49968</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 29.4993</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 36.46346</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.614312</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 76.99194</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 35337.66</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 152.3077</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 49314.46</code></pre>
+</div>
+</div>
+<p>The histograms of each variable show that the data of the respondents tends to have a significantly higher range, and they tend to have much higher values on the higher end of the range. The Chi-squared and Fishers test show low p values which provide evidence that there is some difference between the groups, but this may be incorrect.</p>
+<p><strong>(d) Is there evidence of nonresponse bias, when you compare the subsample of nonrespondents to the respondents in the original survey?</strong></p>
+<p>There is little evidence that the respondents and nonrespondents differ in statistically significant ways. Specifically, the means and shapes of the distributions of each shared variable are very similar, so there is no evidence of significant differences between the two groups. There were numerical tests that provided some evidence, but I think this is incorrect due to the small cell size counts. Overall, there is not enough evidence to confirm a difference in the subsamples of nonrespondents to the subsample of respondents.</p>
+<p><strong>(e) Use an appropriate imputation method for the missing values in teachnr.dat, then calculate the means and variances for the four variables again, compare to the results from (c).</strong></p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>  hrwork     size preprmin   assist 
+       0        1        0        0 </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  hrwork     size preprmin   assist 
+       0        0        0        0 </code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="STAT472_Hw6_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="STAT472_Hw6_files/figure-html/unnamed-chunk-8-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="STAT472_Hw6_files/figure-html/unnamed-chunk-8-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="STAT472_Hw6_files/figure-html/unnamed-chunk-8-4.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in chisq.test(contingency_table): Chi-squared approximation may be
+incorrect</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Pearson's Chi-squared test
+
+data:  contingency_table
+X-squared = 49.61, df = 28, p-value = 0.007146</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Fisher's Exact Test for Count Data with simulated p-value (based on
+    2000 replicates)
+
+data:  comb.data$response and comb.data$size
+p-value = 0.008496
+alternative hypothesis: two.sided</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in chisq.test(contingency_table): Chi-squared approximation may be
+incorrect</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Pearson's Chi-squared test
+
+data:  contingency_table
+X-squared = 94.165, df = 48, p-value = 7.799e-05</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in chisq.test(contingency_table): Chi-squared approximation may be
+incorrect</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Pearson's Chi-squared test
+
+data:  contingency_table
+X-squared = 67.557, df = 36, p-value = 0.001119</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 24.57742</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 104.0571</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] NA</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] NA</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 163.4226</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 14000.62</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 160.1923</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3436.962</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 34.49968</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 29.4993</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 36.46346</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.614312</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 76.99194</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 35337.66</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 152.3077</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 49314.46</code></pre>
+</div>
+</div>
+<p>The results are extremely similar from part c because there was only one missing value within the dataset, so it didn’t alter the overall results much.</p>
+<p><strong>(f) Use an appropriate imputation methods for the missing values in teachers.dat, then calculate the means and variances for the four variables again, compare to the results from (c).</strong></p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>    dist   school   hrwork     size preprmin   assist 
+       0        0        3       12        0        0 </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    dist   school   hrwork     size preprmin   assist 
+       0        0        0        0        0        0 </code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="STAT472_Hw6_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="STAT472_Hw6_files/figure-html/unnamed-chunk-9-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="STAT472_Hw6_files/figure-html/unnamed-chunk-9-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="STAT472_Hw6_files/figure-html/unnamed-chunk-9-4.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in chisq.test(contingency_table): Chi-squared approximation may be
+incorrect</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Pearson's Chi-squared test
+
+data:  contingency_table
+X-squared = 49.61, df = 28, p-value = 0.007146</code></pre>
+</div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Fisher's Exact Test for Count Data with simulated p-value (based on
@@ -407,10 +559,6 @@ data:  comb.data$response and comb.data$size
 p-value = 0.01499
 alternative hypothesis: two.sided</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a contingency table</span></span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>contingency_table <span class="ot">&lt;-</span> <span class="fu">table</span>(comb.data<span class="sc">$</span>response, comb.data<span class="sc">$</span>preprmin)</span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform the Chi-Square test</span></span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(contingency_table)   </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning in chisq.test(contingency_table): Chi-squared approximation may be
 incorrect</code></pre>
@@ -422,10 +570,6 @@ incorrect</code></pre>
 data:  contingency_table
 X-squared = 94.165, df = 48, p-value = 7.799e-05</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a contingency table</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>contingency_table <span class="ot">&lt;-</span> <span class="fu">table</span>(comb.data<span class="sc">$</span>response, comb.data<span class="sc">$</span>assist)</span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform the Chi-Square test</span></span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(contingency_table)   </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning in chisq.test(contingency_table): Chi-squared approximation may be
 incorrect</code></pre>
@@ -437,443 +581,51 @@ incorrect</code></pre>
 data:  contingency_table
 X-squared = 67.557, df = 36, p-value = 0.001119</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachers<span class="sc">$</span>size)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 24.57742</code></pre>
+<pre><code>[1] NA</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachers<span class="sc">$</span>size)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 104.0571</code></pre>
+<pre><code>[1] NA</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachnr<span class="sc">$</span>size)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 23.61538</code></pre>
+<pre><code>[1] NA</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachnr<span class="sc">$</span>size)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 68.96615</code></pre>
+<pre><code>[1] NA</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachers<span class="sc">$</span>preprmin)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 163.4226</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachers<span class="sc">$</span>preprmin)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 14000.62</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachnr<span class="sc">$</span>preprmin)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 160.1923</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachnr<span class="sc">$</span>preprmin)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 3436.962</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachers<span class="sc">$</span>hrwork)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 34.49968</code></pre>
+<pre><code>[1] NA</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachers<span class="sc">$</span>hrwork)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 29.4993</code></pre>
+<pre><code>[1] NA</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachnr<span class="sc">$</span>hrwork)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 36.46346</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachnr<span class="sc">$</span>hrwork)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 2.614312</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachers<span class="sc">$</span>assist)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 76.99194</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachers<span class="sc">$</span>assist)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 35337.66</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachnr<span class="sc">$</span>assist)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 152.3077</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachnr<span class="sc">$</span>assist)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 49314.46</code></pre>
-</div>
-</div>
-<p>The histograms of each variable show that the data of the respondents tends to have a significantly higher range, and they tend to have much higher values on the higher end of the range. The Chi-squared and Fishers test show low p values which provide evidence that there is some difference between the groups, but this may be incorrect.</p>
-<p>(d) Is there evidence of nonresponse bias, when you compare the subsample of nonrespondents to the respondents in the original survey?</p>
-<p>There is little evidence that the respondents and nonrespondents differ in statistically significant ways. Specifically, the means and shapes of the distributions of each shared variable are very similar, so there is no evidence of significant differences between the two groups. There were numerical tests that provided some evidence, but I think this is incorrect due to the small cell size counts. Overall, there is not enough evidence to confirm a difference in the subsamples of nonrespondents to the subsample of respondents.</p>
-<p>(e) Use an appropriate imputation method for the missing values in teachnr.dat, then calculate the means and variances for the four variables again, compare to the results from (c).</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="co">#ex.data&lt;- merge(teachers,teachmi,by=c("dist","school"))</span></span>
-<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a>teachnr<span class="sc">$</span>size <span class="ot">&lt;-</span> <span class="fu">replace</span>(teachnr<span class="sc">$</span>size, teachnr<span class="sc">$</span>size <span class="sc">&lt;</span> <span class="dv">0</span>, <span class="cn">NA</span>)   </span>
-<span id="cb71-4"><a href="#cb71-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(teachnr, <span class="cf">function</span>(x) <span class="fu">sum</span>(<span class="fu">is.na</span>(x)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  hrwork     size preprmin   assist 
-       0        1        0        0 </code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="co"># For all columns in a dataset</span></span>
-<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a>ex.data_imputed <span class="ot">&lt;-</span> teachnr</span>
-<span id="cb73-3"><a href="#cb73-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(ex.data_imputed)) {</span>
-<span id="cb73-4"><a href="#cb73-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">is.numeric</span>(ex.data_imputed[[i]])) {</span>
-<span id="cb73-5"><a href="#cb73-5" aria-hidden="true" tabindex="-1"></a>    ex.data_imputed[[i]][<span class="fu">is.na</span>(ex.data_imputed[[i]])] <span class="ot">&lt;-</span> <span class="fu">mean</span>(ex.data_imputed[[i]], <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb73-6"><a href="#cb73-6" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb73-7"><a href="#cb73-7" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb73-8"><a href="#cb73-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb73-9"><a href="#cb73-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Count missing values in each column</span></span>
-<span id="cb73-10"><a href="#cb73-10" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(ex.data_imputed, <span class="cf">function</span>(x) <span class="fu">sum</span>(<span class="fu">is.na</span>(x)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  hrwork     size preprmin   assist 
-       0        0        0        0 </code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Histograms of the data for each dataset, the respondents and nonrespondents</span></span>
-<span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
-<span id="cb75-3"><a href="#cb75-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachers<span class="sc">$</span>hrwork, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">60</span>))</span>
-<span id="cb75-4"><a href="#cb75-4" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachnr<span class="sc">$</span>hrwork, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">60</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="STAT472_Hw6_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
-<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachers<span class="sc">$</span>preprmin, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">200</span>, <span class="dv">1000</span>))</span>
-<span id="cb76-3"><a href="#cb76-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachnr<span class="sc">$</span>preprmin, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">200</span>, <span class="dv">1000</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="STAT472_Hw6_files/figure-html/unnamed-chunk-8-2.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
-<span id="cb77-2"><a href="#cb77-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachers<span class="sc">$</span>size, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">120</span>))</span>
-<span id="cb77-3"><a href="#cb77-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachnr<span class="sc">$</span>size, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">120</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="STAT472_Hw6_files/figure-html/unnamed-chunk-8-3.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
-<span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachers<span class="sc">$</span>assist, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">500</span>, <span class="dv">2000</span>))</span>
-<span id="cb78-3"><a href="#cb78-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachnr<span class="sc">$</span>assist, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">500</span>, <span class="dv">2000</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="STAT472_Hw6_files/figure-html/unnamed-chunk-8-4.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a contingency table</span></span>
-<span id="cb79-2"><a href="#cb79-2" aria-hidden="true" tabindex="-1"></a>contingency_table <span class="ot">&lt;-</span> <span class="fu">table</span>(comb.data<span class="sc">$</span>response, comb.data<span class="sc">$</span>size)</span>
-<span id="cb79-3"><a href="#cb79-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform the Chi-Square test</span></span>
-<span id="cb79-4"><a href="#cb79-4" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(contingency_table)   </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in chisq.test(contingency_table): Chi-squared approximation may be
-incorrect</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-    Pearson's Chi-squared test
-
-data:  contingency_table
-X-squared = 49.61, df = 28, p-value = 0.007146</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use Fisher's test for small samples</span></span>
-<span id="cb82-2"><a href="#cb82-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fisher.test</span>(comb.data<span class="sc">$</span>response, comb.data<span class="sc">$</span>size, <span class="at">simulate.p.value=</span><span class="cn">TRUE</span>)   </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-    Fisher's Exact Test for Count Data with simulated p-value (based on
-    2000 replicates)
-
-data:  comb.data$response and comb.data$size
-p-value = 0.007996
-alternative hypothesis: two.sided</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb84"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a contingency table</span></span>
-<span id="cb84-2"><a href="#cb84-2" aria-hidden="true" tabindex="-1"></a>contingency_table <span class="ot">&lt;-</span> <span class="fu">table</span>(comb.data<span class="sc">$</span>response, comb.data<span class="sc">$</span>preprmin)</span>
-<span id="cb84-3"><a href="#cb84-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform the Chi-Square test</span></span>
-<span id="cb84-4"><a href="#cb84-4" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(contingency_table)   </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in chisq.test(contingency_table): Chi-squared approximation may be
-incorrect</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-    Pearson's Chi-squared test
-
-data:  contingency_table
-X-squared = 94.165, df = 48, p-value = 7.799e-05</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb87"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a contingency table</span></span>
-<span id="cb87-2"><a href="#cb87-2" aria-hidden="true" tabindex="-1"></a>contingency_table <span class="ot">&lt;-</span> <span class="fu">table</span>(comb.data<span class="sc">$</span>response, comb.data<span class="sc">$</span>assist)</span>
-<span id="cb87-3"><a href="#cb87-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform the Chi-Square test</span></span>
-<span id="cb87-4"><a href="#cb87-4" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(contingency_table)  </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in chisq.test(contingency_table): Chi-squared approximation may be
-incorrect</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-    Pearson's Chi-squared test
-
-data:  contingency_table
-X-squared = 67.557, df = 36, p-value = 0.001119</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb90"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachers<span class="sc">$</span>size)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 24.57742</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb92"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachers<span class="sc">$</span>size)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 104.0571</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb94"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb94-1"><a href="#cb94-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachnr<span class="sc">$</span>size)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] NA</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb96"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachnr<span class="sc">$</span>size)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] NA</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb98"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachers<span class="sc">$</span>preprmin)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 163.4226</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb100"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb100-1"><a href="#cb100-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachers<span class="sc">$</span>preprmin)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 14000.62</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb102"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb102-1"><a href="#cb102-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachnr<span class="sc">$</span>preprmin)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 160.1923</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb104"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb104-1"><a href="#cb104-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachnr<span class="sc">$</span>preprmin)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 3436.962</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb106"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb106-1"><a href="#cb106-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachers<span class="sc">$</span>hrwork)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 34.49968</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb108"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb108-1"><a href="#cb108-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachers<span class="sc">$</span>hrwork)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 29.4993</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb110"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb110-1"><a href="#cb110-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachnr<span class="sc">$</span>hrwork)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 36.46346</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb112"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb112-1"><a href="#cb112-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachnr<span class="sc">$</span>hrwork)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 2.614312</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb114"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb114-1"><a href="#cb114-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachers<span class="sc">$</span>assist)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 76.99194</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb116"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb116-1"><a href="#cb116-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachers<span class="sc">$</span>assist)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 35337.66</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb118"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb118-1"><a href="#cb118-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachnr<span class="sc">$</span>assist)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 152.3077</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb120"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb120-1"><a href="#cb120-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachnr<span class="sc">$</span>assist)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 49314.46</code></pre>
-</div>
-</div>
-<p>The results are extremely similar from part c because there was only one missing value within the dataset, so it didn’t alter the overall results much.</p>
-<p>(f) Use an appropriate imputation methods for the missing values in teachers.dat, then calculate the means and variances for the four variables again, compare to the results from (c).</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb122"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb122-1"><a href="#cb122-1" aria-hidden="true" tabindex="-1"></a>teachers<span class="sc">$</span>hrwork <span class="ot">&lt;-</span> <span class="fu">replace</span>(teachers<span class="sc">$</span>hrwork, teachers<span class="sc">$</span>hrwork <span class="sc">&lt;</span> <span class="dv">0</span>, <span class="cn">NA</span>) </span>
-<span id="cb122-2"><a href="#cb122-2" aria-hidden="true" tabindex="-1"></a>teachers<span class="sc">$</span>size <span class="ot">&lt;-</span> <span class="fu">replace</span>(teachers<span class="sc">$</span>size, teachers<span class="sc">$</span>size <span class="sc">&lt;</span> <span class="dv">0</span>, <span class="cn">NA</span>) </span>
-<span id="cb122-3"><a href="#cb122-3" aria-hidden="true" tabindex="-1"></a>teachers<span class="sc">$</span>preprmin <span class="ot">&lt;-</span> <span class="fu">replace</span>(teachers<span class="sc">$</span>preprmin, teachers<span class="sc">$</span>perprmin <span class="sc">&lt;</span> <span class="dv">0</span>, <span class="cn">NA</span>) </span>
-<span id="cb122-4"><a href="#cb122-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(teachers, <span class="cf">function</span>(x) <span class="fu">sum</span>(<span class="fu">is.na</span>(x)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>    dist   school   hrwork     size preprmin   assist 
-       0        0        3       12        0        0 </code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb124"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb124-1"><a href="#cb124-1" aria-hidden="true" tabindex="-1"></a><span class="co"># For all columns in a dataset</span></span>
-<span id="cb124-2"><a href="#cb124-2" aria-hidden="true" tabindex="-1"></a>ex.data_imputed <span class="ot">&lt;-</span> teachers</span>
-<span id="cb124-3"><a href="#cb124-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(ex.data_imputed)) {</span>
-<span id="cb124-4"><a href="#cb124-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">is.numeric</span>(ex.data_imputed[[i]])) {</span>
-<span id="cb124-5"><a href="#cb124-5" aria-hidden="true" tabindex="-1"></a>    ex.data_imputed[[i]][<span class="fu">is.na</span>(ex.data_imputed[[i]])] <span class="ot">&lt;-</span> <span class="fu">mean</span>(ex.data_imputed[[i]], <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb124-6"><a href="#cb124-6" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb124-7"><a href="#cb124-7" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb124-8"><a href="#cb124-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb124-9"><a href="#cb124-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Count missing values in each column</span></span>
-<span id="cb124-10"><a href="#cb124-10" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(ex.data_imputed, <span class="cf">function</span>(x) <span class="fu">sum</span>(<span class="fu">is.na</span>(x)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>    dist   school   hrwork     size preprmin   assist 
-       0        0        0        0        0        0 </code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb126"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb126-1"><a href="#cb126-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Histograms of the data for each dataset, the respondents and nonrespondents</span></span>
-<span id="cb126-2"><a href="#cb126-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
-<span id="cb126-3"><a href="#cb126-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachers<span class="sc">$</span>hrwork, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">60</span>))</span>
-<span id="cb126-4"><a href="#cb126-4" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachnr<span class="sc">$</span>hrwork, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">60</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="STAT472_Hw6_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb127"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb127-1"><a href="#cb127-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
-<span id="cb127-2"><a href="#cb127-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachers<span class="sc">$</span>preprmin, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">200</span>, <span class="dv">1000</span>))</span>
-<span id="cb127-3"><a href="#cb127-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachnr<span class="sc">$</span>preprmin, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">200</span>, <span class="dv">1000</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="STAT472_Hw6_files/figure-html/unnamed-chunk-9-2.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb128"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb128-1"><a href="#cb128-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
-<span id="cb128-2"><a href="#cb128-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachers<span class="sc">$</span>size, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">120</span>))</span>
-<span id="cb128-3"><a href="#cb128-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachnr<span class="sc">$</span>size, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">120</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="STAT472_Hw6_files/figure-html/unnamed-chunk-9-3.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb129"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb129-1"><a href="#cb129-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
-<span id="cb129-2"><a href="#cb129-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachers<span class="sc">$</span>assist, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">500</span>, <span class="dv">2000</span>))</span>
-<span id="cb129-3"><a href="#cb129-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachnr<span class="sc">$</span>assist, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">500</span>, <span class="dv">2000</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="STAT472_Hw6_files/figure-html/unnamed-chunk-9-4.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb130"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb130-1"><a href="#cb130-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a contingency table</span></span>
-<span id="cb130-2"><a href="#cb130-2" aria-hidden="true" tabindex="-1"></a>contingency_table <span class="ot">&lt;-</span> <span class="fu">table</span>(comb.data<span class="sc">$</span>response, comb.data<span class="sc">$</span>size)</span>
-<span id="cb130-3"><a href="#cb130-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform the Chi-Square test</span></span>
-<span id="cb130-4"><a href="#cb130-4" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(contingency_table)   </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in chisq.test(contingency_table): Chi-squared approximation may be
-incorrect</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-    Pearson's Chi-squared test
-
-data:  contingency_table
-X-squared = 49.61, df = 28, p-value = 0.007146</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb133"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb133-1"><a href="#cb133-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use Fisher's test for small samples</span></span>
-<span id="cb133-2"><a href="#cb133-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fisher.test</span>(comb.data<span class="sc">$</span>response, comb.data<span class="sc">$</span>size, <span class="at">simulate.p.value=</span><span class="cn">TRUE</span>)   </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-    Fisher's Exact Test for Count Data with simulated p-value (based on
-    2000 replicates)
-
-data:  comb.data$response and comb.data$size
-p-value = 0.01399
-alternative hypothesis: two.sided</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb135"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb135-1"><a href="#cb135-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a contingency table</span></span>
-<span id="cb135-2"><a href="#cb135-2" aria-hidden="true" tabindex="-1"></a>contingency_table <span class="ot">&lt;-</span> <span class="fu">table</span>(comb.data<span class="sc">$</span>response, comb.data<span class="sc">$</span>preprmin)</span>
-<span id="cb135-3"><a href="#cb135-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform the Chi-Square test</span></span>
-<span id="cb135-4"><a href="#cb135-4" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(contingency_table)   </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in chisq.test(contingency_table): Chi-squared approximation may be
-incorrect</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-    Pearson's Chi-squared test
-
-data:  contingency_table
-X-squared = 94.165, df = 48, p-value = 7.799e-05</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb138"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb138-1"><a href="#cb138-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a contingency table</span></span>
-<span id="cb138-2"><a href="#cb138-2" aria-hidden="true" tabindex="-1"></a>contingency_table <span class="ot">&lt;-</span> <span class="fu">table</span>(comb.data<span class="sc">$</span>response, comb.data<span class="sc">$</span>assist)</span>
-<span id="cb138-3"><a href="#cb138-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform the Chi-Square test</span></span>
-<span id="cb138-4"><a href="#cb138-4" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(contingency_table)  </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in chisq.test(contingency_table): Chi-squared approximation may be
-incorrect</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-    Pearson's Chi-squared test
-
-data:  contingency_table
-X-squared = 67.557, df = 36, p-value = 0.001119</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb141"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb141-1"><a href="#cb141-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachers<span class="sc">$</span>size)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] NA</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb143"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb143-1"><a href="#cb143-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachers<span class="sc">$</span>size)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] NA</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb145"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb145-1"><a href="#cb145-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachnr<span class="sc">$</span>size)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] NA</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb147"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb147-1"><a href="#cb147-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachnr<span class="sc">$</span>size)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] NA</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb149"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb149-1"><a href="#cb149-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachers<span class="sc">$</span>preprmin)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 163.4226</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb151"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb151-1"><a href="#cb151-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachers<span class="sc">$</span>preprmin)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 14000.62</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb153"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb153-1"><a href="#cb153-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachnr<span class="sc">$</span>preprmin)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 160.1923</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb155"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb155-1"><a href="#cb155-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachnr<span class="sc">$</span>preprmin)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 3436.962</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb157"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb157-1"><a href="#cb157-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachers<span class="sc">$</span>hrwork)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] NA</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb159"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb159-1"><a href="#cb159-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachers<span class="sc">$</span>hrwork)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] NA</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb161"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb161-1"><a href="#cb161-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachnr<span class="sc">$</span>hrwork)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 36.46346</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb163"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb163-1"><a href="#cb163-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachnr<span class="sc">$</span>hrwork)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 2.614312</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb165"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb165-1"><a href="#cb165-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachers<span class="sc">$</span>assist)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 76.99194</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb167"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb167-1"><a href="#cb167-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachers<span class="sc">$</span>assist)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 35337.66</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb169"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb169-1"><a href="#cb169-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachnr<span class="sc">$</span>assist)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 152.3077</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb171"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb171-1"><a href="#cb171-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachnr<span class="sc">$</span>assist)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 49314.46</code></pre>
 </div>
@@ -886,6 +638,296 @@ X-squared = 67.557, df = 36, p-value = 0.001119</code></pre>
 <p><a href="https://stackoverflow.com/questions/21219447/calculating-percentile-of-dataset-column" class="uri">https://stackoverflow.com/questions/21219447/calculating-percentile-of-dataset-column</a></p>
 <p><a href="https://search.r-project.org/CRAN/refmans/SDAResources/html/nhanes.html" class="uri">https://search.r-project.org/CRAN/refmans/SDAResources/html/nhanes.html</a></p>
 <p><a href="https://www.rdocumentation.org/packages/SDAResources/versions/0.1.1/topics/nhanes" class="uri">https://www.rdocumentation.org/packages/SDAResources/versions/0.1.1/topics/nhanes</a></p>
+</section>
+<section id="code-appendix" class="level2">
+<h2 class="anchored" data-anchor-id="code-appendix">Code Appendix:</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(survey, weights, SDAResources, nrba, dplyr)</span>
+<span id="cb83-2"><a href="#cb83-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(nhanes)</span>
+<span id="cb83-3"><a href="#cb83-3" aria-hidden="true" tabindex="-1"></a><span class="co">#hist(nhanes$bmdavsad)</span></span>
+<span id="cb83-4"><a href="#cb83-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-5"><a href="#cb83-5" aria-hidden="true" tabindex="-1"></a><span class="co"># x is the data, weight is the vector of weights</span></span>
+<span id="cb83-6"><a href="#cb83-6" aria-hidden="true" tabindex="-1"></a><span class="fu">wtd.hist</span>(nhanes<span class="sc">$</span>bmdavsad, <span class="at">weight =</span> nhanes<span class="sc">$</span>wtint2yr)</span>
+<span id="cb83-7"><a href="#cb83-7" aria-hidden="true" tabindex="-1"></a>nhanesnew<span class="ot">&lt;-</span>nhanes <span class="co">#copy nhanes as nhanesnew, since we want to create a new column </span></span>
+<span id="cb83-8"><a href="#cb83-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-9"><a href="#cb83-9" aria-hidden="true" tabindex="-1"></a><span class="co">#dataframe for the domain of adults age 20 and over</span></span>
+<span id="cb83-10"><a href="#cb83-10" aria-hidden="true" tabindex="-1"></a>nhanesnew <span class="ot">&lt;-</span> <span class="fu">subset</span>(nhanesnew, ridageyr <span class="sc">&gt;=</span> <span class="dv">20</span>)</span>
+<span id="cb83-11"><a href="#cb83-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-12"><a href="#cb83-12" aria-hidden="true" tabindex="-1"></a><span class="co">#the following code is from the chapter 7 class notes</span></span>
+<span id="cb83-13"><a href="#cb83-13" aria-hidden="true" tabindex="-1"></a>nhanes<span class="sc">$</span>age20d<span class="ot">&lt;-</span><span class="fu">rep</span>(<span class="dv">0</span>,<span class="fu">nrow</span>(nhanes))</span>
+<span id="cb83-14"><a href="#cb83-14" aria-hidden="true" tabindex="-1"></a>nhanes<span class="sc">$</span>age20d[nhanes<span class="sc">$</span>ridageyr <span class="sc">&gt;=</span><span class="dv">20</span> <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(nhanes<span class="sc">$</span>bmxbmi)]<span class="ot">&lt;-</span><span class="dv">1</span></span>
+<span id="cb83-15"><a href="#cb83-15" aria-hidden="true" tabindex="-1"></a><span class="co"># check missing value counts for new variables</span></span>
+<span id="cb83-16"><a href="#cb83-16" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(nhanes<span class="sc">$</span>age20d))</span>
+<span id="cb83-17"><a href="#cb83-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-18"><a href="#cb83-18" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(nhanes<span class="sc">$</span>age20d) <span class="co"># how many records in domain?</span></span>
+<span id="cb83-19"><a href="#cb83-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-20"><a href="#cb83-20" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(nhanes[, <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, <span class="dv">15</span>, <span class="dv">26</span>)])</span>
+<span id="cb83-21"><a href="#cb83-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-22"><a href="#cb83-22" aria-hidden="true" tabindex="-1"></a><span class="co"># stratified cluster design</span></span>
+<span id="cb83-23"><a href="#cb83-23" aria-hidden="true" tabindex="-1"></a>d0709 <span class="ot">&lt;-</span> <span class="fu">svydesign</span>(<span class="at">id =</span> <span class="sc">~</span>sdmvpsu, <span class="at">strata=</span><span class="sc">~</span>sdmvstra,</span>
+<span id="cb83-24"><a href="#cb83-24" aria-hidden="true" tabindex="-1"></a><span class="at">weights=</span><span class="sc">~</span>wtmec2yr, <span class="at">nest=</span><span class="cn">TRUE</span>, <span class="at">data =</span> nhanes)</span>
+<span id="cb83-25"><a href="#cb83-25" aria-hidden="true" tabindex="-1"></a><span class="co"># domain estimation, age20+</span></span>
+<span id="cb83-26"><a href="#cb83-26" aria-hidden="true" tabindex="-1"></a>d0709sub<span class="ot">&lt;-</span><span class="fu">subset</span>(d0709, age20d <span class="sc">==</span><span class="dv">1</span>)</span>
+<span id="cb83-27"><a href="#cb83-27" aria-hidden="true" tabindex="-1"></a>d0709sub</span>
+<span id="cb83-28"><a href="#cb83-28" aria-hidden="true" tabindex="-1"></a><span class="do">## Stratified 1 - level Cluster Sampling design (with replacement)</span></span>
+<span id="cb83-29"><a href="#cb83-29" aria-hidden="true" tabindex="-1"></a><span class="do">## With (30) clusters.</span></span>
+<span id="cb83-30"><a href="#cb83-30" aria-hidden="true" tabindex="-1"></a><span class="do">## subset(d0709, age20d == 1)</span></span>
+<span id="cb83-31"><a href="#cb83-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Request means and design effects</span></span>
+<span id="cb83-32"><a href="#cb83-32" aria-hidden="true" tabindex="-1"></a>nhmeans<span class="ot">&lt;-</span><span class="fu">svymean</span>(<span class="sc">~</span>bmxbmi, d0709sub, <span class="at">deff=</span><span class="cn">TRUE</span>)</span>
+<span id="cb83-33"><a href="#cb83-33" aria-hidden="true" tabindex="-1"></a><span class="fu">degf</span>(d0709sub)</span>
+<span id="cb83-34"><a href="#cb83-34" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 15</span></span>
+<span id="cb83-35"><a href="#cb83-35" aria-hidden="true" tabindex="-1"></a>nhmeans</span>
+<span id="cb83-36"><a href="#cb83-36" aria-hidden="true" tabindex="-1"></a><span class="do">## mean SE DEff</span></span>
+<span id="cb83-37"><a href="#cb83-37" aria-hidden="true" tabindex="-1"></a><span class="do">## bmxbmi 29.3891 0.2532 7.1248</span></span>
+<span id="cb83-38"><a href="#cb83-38" aria-hidden="true" tabindex="-1"></a><span class="fu">confint</span>(nhmeans,<span class="at">df=</span><span class="fu">degf</span>(d0709sub))</span>
+<span id="cb83-39"><a href="#cb83-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Source - https://stackoverflow.com/a/21219821</span></span>
+<span id="cb83-40"><a href="#cb83-40" aria-hidden="true" tabindex="-1"></a><span class="co"># Posted by Roman Luštrik</span></span>
+<span id="cb83-41"><a href="#cb83-41" aria-hidden="true" tabindex="-1"></a><span class="co"># Retrieved 2026-04-28, License - CC BY-SA 3.0</span></span>
+<span id="cb83-42"><a href="#cb83-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-43"><a href="#cb83-43" aria-hidden="true" tabindex="-1"></a><span class="co"># Omit missing values of bmxbmi</span></span>
+<span id="cb83-44"><a href="#cb83-44" aria-hidden="true" tabindex="-1"></a>nhanes <span class="ot">&lt;-</span> <span class="fu">subset</span>(nhanes, <span class="sc">!</span><span class="fu">is.na</span>(bmdavsad))</span>
+<span id="cb83-45"><a href="#cb83-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-46"><a href="#cb83-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-47"><a href="#cb83-47" aria-hidden="true" tabindex="-1"></a><span class="co">#Filter nhanes by female gender and calculate percentiles of bmdavsad</span></span>
+<span id="cb83-48"><a href="#cb83-48" aria-hidden="true" tabindex="-1"></a>nhanesf <span class="ot">&lt;-</span> nhanes</span>
+<span id="cb83-49"><a href="#cb83-49" aria-hidden="true" tabindex="-1"></a>nhanesf <span class="ot">&lt;-</span> <span class="fu">subset</span>(nhanesf, riagendr <span class="sc">==</span> <span class="dv">2</span>)</span>
+<span id="cb83-50"><a href="#cb83-50" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(nhanesf<span class="sc">$</span>bmdavsad, <span class="at">probs =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>, <span class="dv">1</span>)) <span class="co"># quartile</span></span>
+<span id="cb83-51"><a href="#cb83-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-52"><a href="#cb83-52" aria-hidden="true" tabindex="-1"></a><span class="co">#Filter nhanes by male gender and calculate percentiles of bmdavsad</span></span>
+<span id="cb83-53"><a href="#cb83-53" aria-hidden="true" tabindex="-1"></a>nhanesm <span class="ot">&lt;-</span> nhanes</span>
+<span id="cb83-54"><a href="#cb83-54" aria-hidden="true" tabindex="-1"></a>nhanesm <span class="ot">&lt;-</span> <span class="fu">subset</span>(nhanesm, riagendr <span class="sc">==</span> <span class="dv">1</span>)</span>
+<span id="cb83-55"><a href="#cb83-55" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(nhanesm<span class="sc">$</span>bmdavsad, <span class="at">probs =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>, <span class="dv">1</span>)) <span class="co"># quartile</span></span>
+<span id="cb83-56"><a href="#cb83-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-57"><a href="#cb83-57" aria-hidden="true" tabindex="-1"></a> nhanes<span class="sc">$</span>riagendr <span class="ot">&lt;-</span> <span class="fu">factor</span>(nhanes<span class="sc">$</span>riagendr)</span>
+<span id="cb83-58"><a href="#cb83-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-59"><a href="#cb83-59" aria-hidden="true" tabindex="-1"></a><span class="co">#side-by-side boxplots of the data</span></span>
+<span id="cb83-60"><a href="#cb83-60" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(nhanes<span class="sc">$</span>bmdavsad <span class="sc">~</span> nhanes<span class="sc">$</span>riagendr,</span>
+<span id="cb83-61"><a href="#cb83-61" aria-hidden="true" tabindex="-1"></a>        <span class="at">col=</span><span class="st">'steelblue'</span>,</span>
+<span id="cb83-62"><a href="#cb83-62" aria-hidden="true" tabindex="-1"></a>        <span class="at">main=</span><span class="st">'Average Sagittal Abdominal Diameter by Gender'</span>,</span>
+<span id="cb83-63"><a href="#cb83-63" aria-hidden="true" tabindex="-1"></a>        <span class="at">xlab=</span><span class="st">'Dender'</span>,</span>
+<span id="cb83-64"><a href="#cb83-64" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylab=</span><span class="st">'Average Sagittal Abdominal Diameter'</span>,</span>
+<span id="cb83-65"><a href="#cb83-65" aria-hidden="true" tabindex="-1"></a>        <span class="at">names =</span> <span class="fu">c</span>(<span class="st">"Male"</span>, <span class="st">"Female"</span>)) </span>
+<span id="cb83-66"><a href="#cb83-66" aria-hidden="true" tabindex="-1"></a><span class="co"># The following code is from chapter 7 class notes</span></span>
+<span id="cb83-67"><a href="#cb83-67" aria-hidden="true" tabindex="-1"></a><span class="do">### Smoothed trend line for mean</span></span>
+<span id="cb83-68"><a href="#cb83-68" aria-hidden="true" tabindex="-1"></a><span class="co"># Smoothed trend line with bubble plot of BMI versus age</span></span>
+<span id="cb83-69"><a href="#cb83-69" aria-hidden="true" tabindex="-1"></a><span class="co"># plot data bmxbmi~ridageyr</span></span>
+<span id="cb83-70"><a href="#cb83-70" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">las=</span><span class="dv">1</span>) <span class="co"># make tick mark labels horizontal</span></span>
+<span id="cb83-71"><a href="#cb83-71" aria-hidden="true" tabindex="-1"></a><span class="fu">svyplot</span>(bmdavsad<span class="sc">~</span>bmxbmi, <span class="at">design=</span>d0709, <span class="at">style=</span><span class="st">"bubble"</span>,</span>
+<span id="cb83-72"><a href="#cb83-72" aria-hidden="true" tabindex="-1"></a><span class="at">basecol=</span><span class="st">"gray"</span>,<span class="at">inches=</span><span class="fl">0.03</span>,</span>
+<span id="cb83-73"><a href="#cb83-73" aria-hidden="true" tabindex="-1"></a><span class="at">ylab=</span><span class="st">"Average Sagittal Abdominal Diameter"</span>,<span class="at">xlab=</span><span class="st">"Body Mass Index"</span>,</span>
+<span id="cb83-74"><a href="#cb83-74" aria-hidden="true" tabindex="-1"></a><span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">10</span>,<span class="dv">70</span>),<span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">50</span>),</span>
+<span id="cb83-75"><a href="#cb83-75" aria-hidden="true" tabindex="-1"></a><span class="at">main=</span><span class="st">"Smoothed trend line with bubble plot of BMI versus age"</span>)</span>
+<span id="cb83-76"><a href="#cb83-76" aria-hidden="true" tabindex="-1"></a><span class="co"># plot smoothing trend line</span></span>
+<span id="cb83-77"><a href="#cb83-77" aria-hidden="true" tabindex="-1"></a><span class="co"># library(KernSmooth) # install and load the package</span></span>
+<span id="cb83-78"><a href="#cb83-78" aria-hidden="true" tabindex="-1"></a>smth<span class="ot">&lt;-</span><span class="fu">svysmooth</span>(bmdavsad<span class="sc">~</span>bmxbmi,d0709)</span>
+<span id="cb83-79"><a href="#cb83-79" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(smth,<span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb83-80"><a href="#cb83-80" aria-hidden="true" tabindex="-1"></a>teachers <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"~/Downloads/CSV data sets for SDA 3e/teachers.csv"</span>, <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">","</span>) </span>
+<span id="cb83-81"><a href="#cb83-81" aria-hidden="true" tabindex="-1"></a>teachnr <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"~/Downloads/CSV data sets for SDA 3e/teachnr.csv"</span>, <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">","</span>)</span>
+<span id="cb83-82"><a href="#cb83-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-83"><a href="#cb83-83" aria-hidden="true" tabindex="-1"></a>comb.data <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(teachers,teachnr)</span>
+<span id="cb83-84"><a href="#cb83-84" aria-hidden="true" tabindex="-1"></a>comb.data<span class="sc">$</span>response <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>,<span class="fu">nrow</span>(comb.data))</span>
+<span id="cb83-85"><a href="#cb83-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-86"><a href="#cb83-86" aria-hidden="true" tabindex="-1"></a>comb.data<span class="sc">$</span>response[<span class="sc">!</span><span class="fu">is.na</span>(comb.data<span class="sc">$</span>dist)] <span class="ot">&lt;-</span> <span class="dv">1</span>  </span>
+<span id="cb83-87"><a href="#cb83-87" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert numeric codes (e.g., 1, 2) to a factor with labels</span></span>
+<span id="cb83-88"><a href="#cb83-88" aria-hidden="true" tabindex="-1"></a>comb.data<span class="sc">$</span>response <span class="ot">&lt;-</span> <span class="fu">factor</span>(comb.data<span class="sc">$</span>response,</span>
+<span id="cb83-89"><a href="#cb83-89" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>),     </span>
+<span id="cb83-90"><a href="#cb83-90" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Respondent"</span>, <span class="st">"Nonrespondent"</span>)) </span>
+<span id="cb83-91"><a href="#cb83-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-92"><a href="#cb83-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-93"><a href="#cb83-93" aria-hidden="true" tabindex="-1"></a><span class="co"># Histograms of the data for each dataset, the respondents and nonrespondents</span></span>
+<span id="cb83-94"><a href="#cb83-94" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb83-95"><a href="#cb83-95" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachers<span class="sc">$</span>hrwork, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">60</span>))</span>
+<span id="cb83-96"><a href="#cb83-96" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachnr<span class="sc">$</span>hrwork, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">60</span>))</span>
+<span id="cb83-97"><a href="#cb83-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-98"><a href="#cb83-98" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb83-99"><a href="#cb83-99" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachers<span class="sc">$</span>preprmin, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">200</span>, <span class="dv">1000</span>))</span>
+<span id="cb83-100"><a href="#cb83-100" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachnr<span class="sc">$</span>preprmin, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">200</span>, <span class="dv">1000</span>))</span>
+<span id="cb83-101"><a href="#cb83-101" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-102"><a href="#cb83-102" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb83-103"><a href="#cb83-103" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachers<span class="sc">$</span>size, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">120</span>))</span>
+<span id="cb83-104"><a href="#cb83-104" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachnr<span class="sc">$</span>size, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">120</span>))</span>
+<span id="cb83-105"><a href="#cb83-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-106"><a href="#cb83-106" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb83-107"><a href="#cb83-107" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachers<span class="sc">$</span>assist, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">500</span>, <span class="dv">2000</span>))</span>
+<span id="cb83-108"><a href="#cb83-108" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachnr<span class="sc">$</span>assist, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">500</span>, <span class="dv">2000</span>))</span>
+<span id="cb83-109"><a href="#cb83-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-110"><a href="#cb83-110" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a contingency table</span></span>
+<span id="cb83-111"><a href="#cb83-111" aria-hidden="true" tabindex="-1"></a>contingency_table <span class="ot">&lt;-</span> <span class="fu">table</span>(comb.data<span class="sc">$</span>response, comb.data<span class="sc">$</span>size)</span>
+<span id="cb83-112"><a href="#cb83-112" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform the Chi-Square test</span></span>
+<span id="cb83-113"><a href="#cb83-113" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(contingency_table)   </span>
+<span id="cb83-114"><a href="#cb83-114" aria-hidden="true" tabindex="-1"></a><span class="co"># Use Fisher's test for small samples</span></span>
+<span id="cb83-115"><a href="#cb83-115" aria-hidden="true" tabindex="-1"></a><span class="fu">fisher.test</span>(comb.data<span class="sc">$</span>response, comb.data<span class="sc">$</span>size, <span class="at">simulate.p.value=</span><span class="cn">TRUE</span>)   </span>
+<span id="cb83-116"><a href="#cb83-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-117"><a href="#cb83-117" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a contingency table</span></span>
+<span id="cb83-118"><a href="#cb83-118" aria-hidden="true" tabindex="-1"></a>contingency_table <span class="ot">&lt;-</span> <span class="fu">table</span>(comb.data<span class="sc">$</span>response, comb.data<span class="sc">$</span>preprmin)</span>
+<span id="cb83-119"><a href="#cb83-119" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform the Chi-Square test</span></span>
+<span id="cb83-120"><a href="#cb83-120" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(contingency_table)   </span>
+<span id="cb83-121"><a href="#cb83-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-122"><a href="#cb83-122" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a contingency table</span></span>
+<span id="cb83-123"><a href="#cb83-123" aria-hidden="true" tabindex="-1"></a>contingency_table <span class="ot">&lt;-</span> <span class="fu">table</span>(comb.data<span class="sc">$</span>response, comb.data<span class="sc">$</span>assist)</span>
+<span id="cb83-124"><a href="#cb83-124" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform the Chi-Square test</span></span>
+<span id="cb83-125"><a href="#cb83-125" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(contingency_table)   </span>
+<span id="cb83-126"><a href="#cb83-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-127"><a href="#cb83-127" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachers<span class="sc">$</span>size)</span>
+<span id="cb83-128"><a href="#cb83-128" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachers<span class="sc">$</span>size)</span>
+<span id="cb83-129"><a href="#cb83-129" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachnr<span class="sc">$</span>size)</span>
+<span id="cb83-130"><a href="#cb83-130" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachnr<span class="sc">$</span>size)</span>
+<span id="cb83-131"><a href="#cb83-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-132"><a href="#cb83-132" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachers<span class="sc">$</span>preprmin)</span>
+<span id="cb83-133"><a href="#cb83-133" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachers<span class="sc">$</span>preprmin)</span>
+<span id="cb83-134"><a href="#cb83-134" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachnr<span class="sc">$</span>preprmin)</span>
+<span id="cb83-135"><a href="#cb83-135" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachnr<span class="sc">$</span>preprmin)</span>
+<span id="cb83-136"><a href="#cb83-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-137"><a href="#cb83-137" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachers<span class="sc">$</span>hrwork)</span>
+<span id="cb83-138"><a href="#cb83-138" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachers<span class="sc">$</span>hrwork)</span>
+<span id="cb83-139"><a href="#cb83-139" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachnr<span class="sc">$</span>hrwork)</span>
+<span id="cb83-140"><a href="#cb83-140" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachnr<span class="sc">$</span>hrwork)</span>
+<span id="cb83-141"><a href="#cb83-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-142"><a href="#cb83-142" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachers<span class="sc">$</span>assist)</span>
+<span id="cb83-143"><a href="#cb83-143" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachers<span class="sc">$</span>assist)</span>
+<span id="cb83-144"><a href="#cb83-144" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachnr<span class="sc">$</span>assist)</span>
+<span id="cb83-145"><a href="#cb83-145" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachnr<span class="sc">$</span>assist)</span>
+<span id="cb83-146"><a href="#cb83-146" aria-hidden="true" tabindex="-1"></a><span class="co">#ex.data&lt;- merge(teachers,teachmi,by=c("dist","school"))</span></span>
+<span id="cb83-147"><a href="#cb83-147" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-148"><a href="#cb83-148" aria-hidden="true" tabindex="-1"></a>teachnr<span class="sc">$</span>size <span class="ot">&lt;-</span> <span class="fu">replace</span>(teachnr<span class="sc">$</span>size, teachnr<span class="sc">$</span>size <span class="sc">&lt;</span> <span class="dv">0</span>, <span class="cn">NA</span>)   </span>
+<span id="cb83-149"><a href="#cb83-149" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(teachnr, <span class="cf">function</span>(x) <span class="fu">sum</span>(<span class="fu">is.na</span>(x)))</span>
+<span id="cb83-150"><a href="#cb83-150" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-151"><a href="#cb83-151" aria-hidden="true" tabindex="-1"></a><span class="co"># For all columns in a dataset</span></span>
+<span id="cb83-152"><a href="#cb83-152" aria-hidden="true" tabindex="-1"></a>ex.data_imputed <span class="ot">&lt;-</span> teachnr</span>
+<span id="cb83-153"><a href="#cb83-153" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(ex.data_imputed)) {</span>
+<span id="cb83-154"><a href="#cb83-154" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">is.numeric</span>(ex.data_imputed[[i]])) {</span>
+<span id="cb83-155"><a href="#cb83-155" aria-hidden="true" tabindex="-1"></a>    ex.data_imputed[[i]][<span class="fu">is.na</span>(ex.data_imputed[[i]])] <span class="ot">&lt;-</span> <span class="fu">mean</span>(ex.data_imputed[[i]], <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb83-156"><a href="#cb83-156" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb83-157"><a href="#cb83-157" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb83-158"><a href="#cb83-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-159"><a href="#cb83-159" aria-hidden="true" tabindex="-1"></a><span class="co"># Count missing values in each column</span></span>
+<span id="cb83-160"><a href="#cb83-160" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(ex.data_imputed, <span class="cf">function</span>(x) <span class="fu">sum</span>(<span class="fu">is.na</span>(x)))</span>
+<span id="cb83-161"><a href="#cb83-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-162"><a href="#cb83-162" aria-hidden="true" tabindex="-1"></a><span class="co"># Histograms of the data for each dataset, the respondents and nonrespondents</span></span>
+<span id="cb83-163"><a href="#cb83-163" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb83-164"><a href="#cb83-164" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachers<span class="sc">$</span>hrwork, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">60</span>))</span>
+<span id="cb83-165"><a href="#cb83-165" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachnr<span class="sc">$</span>hrwork, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">60</span>))</span>
+<span id="cb83-166"><a href="#cb83-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-167"><a href="#cb83-167" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb83-168"><a href="#cb83-168" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachers<span class="sc">$</span>preprmin, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">200</span>, <span class="dv">1000</span>))</span>
+<span id="cb83-169"><a href="#cb83-169" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachnr<span class="sc">$</span>preprmin, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">200</span>, <span class="dv">1000</span>))</span>
+<span id="cb83-170"><a href="#cb83-170" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-171"><a href="#cb83-171" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb83-172"><a href="#cb83-172" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachers<span class="sc">$</span>size, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">120</span>))</span>
+<span id="cb83-173"><a href="#cb83-173" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachnr<span class="sc">$</span>size, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">120</span>))</span>
+<span id="cb83-174"><a href="#cb83-174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-175"><a href="#cb83-175" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb83-176"><a href="#cb83-176" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachers<span class="sc">$</span>assist, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">500</span>, <span class="dv">2000</span>))</span>
+<span id="cb83-177"><a href="#cb83-177" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachnr<span class="sc">$</span>assist, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">500</span>, <span class="dv">2000</span>))</span>
+<span id="cb83-178"><a href="#cb83-178" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-179"><a href="#cb83-179" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a contingency table</span></span>
+<span id="cb83-180"><a href="#cb83-180" aria-hidden="true" tabindex="-1"></a>contingency_table <span class="ot">&lt;-</span> <span class="fu">table</span>(comb.data<span class="sc">$</span>response, comb.data<span class="sc">$</span>size)</span>
+<span id="cb83-181"><a href="#cb83-181" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform the Chi-Square test</span></span>
+<span id="cb83-182"><a href="#cb83-182" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(contingency_table)   </span>
+<span id="cb83-183"><a href="#cb83-183" aria-hidden="true" tabindex="-1"></a><span class="co"># Use Fisher's test for small samples</span></span>
+<span id="cb83-184"><a href="#cb83-184" aria-hidden="true" tabindex="-1"></a><span class="fu">fisher.test</span>(comb.data<span class="sc">$</span>response, comb.data<span class="sc">$</span>size, <span class="at">simulate.p.value=</span><span class="cn">TRUE</span>)   </span>
+<span id="cb83-185"><a href="#cb83-185" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-186"><a href="#cb83-186" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a contingency table</span></span>
+<span id="cb83-187"><a href="#cb83-187" aria-hidden="true" tabindex="-1"></a>contingency_table <span class="ot">&lt;-</span> <span class="fu">table</span>(comb.data<span class="sc">$</span>response, comb.data<span class="sc">$</span>preprmin)</span>
+<span id="cb83-188"><a href="#cb83-188" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform the Chi-Square test</span></span>
+<span id="cb83-189"><a href="#cb83-189" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(contingency_table)   </span>
+<span id="cb83-190"><a href="#cb83-190" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-191"><a href="#cb83-191" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a contingency table</span></span>
+<span id="cb83-192"><a href="#cb83-192" aria-hidden="true" tabindex="-1"></a>contingency_table <span class="ot">&lt;-</span> <span class="fu">table</span>(comb.data<span class="sc">$</span>response, comb.data<span class="sc">$</span>assist)</span>
+<span id="cb83-193"><a href="#cb83-193" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform the Chi-Square test</span></span>
+<span id="cb83-194"><a href="#cb83-194" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(contingency_table)  </span>
+<span id="cb83-195"><a href="#cb83-195" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-196"><a href="#cb83-196" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachers<span class="sc">$</span>size)</span>
+<span id="cb83-197"><a href="#cb83-197" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachers<span class="sc">$</span>size)</span>
+<span id="cb83-198"><a href="#cb83-198" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachnr<span class="sc">$</span>size)</span>
+<span id="cb83-199"><a href="#cb83-199" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachnr<span class="sc">$</span>size)</span>
+<span id="cb83-200"><a href="#cb83-200" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-201"><a href="#cb83-201" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachers<span class="sc">$</span>preprmin)</span>
+<span id="cb83-202"><a href="#cb83-202" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachers<span class="sc">$</span>preprmin)</span>
+<span id="cb83-203"><a href="#cb83-203" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachnr<span class="sc">$</span>preprmin)</span>
+<span id="cb83-204"><a href="#cb83-204" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachnr<span class="sc">$</span>preprmin)</span>
+<span id="cb83-205"><a href="#cb83-205" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-206"><a href="#cb83-206" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachers<span class="sc">$</span>hrwork)</span>
+<span id="cb83-207"><a href="#cb83-207" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachers<span class="sc">$</span>hrwork)</span>
+<span id="cb83-208"><a href="#cb83-208" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachnr<span class="sc">$</span>hrwork)</span>
+<span id="cb83-209"><a href="#cb83-209" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachnr<span class="sc">$</span>hrwork)</span>
+<span id="cb83-210"><a href="#cb83-210" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-211"><a href="#cb83-211" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachers<span class="sc">$</span>assist)</span>
+<span id="cb83-212"><a href="#cb83-212" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachers<span class="sc">$</span>assist)</span>
+<span id="cb83-213"><a href="#cb83-213" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachnr<span class="sc">$</span>assist)</span>
+<span id="cb83-214"><a href="#cb83-214" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachnr<span class="sc">$</span>assist)</span>
+<span id="cb83-215"><a href="#cb83-215" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-216"><a href="#cb83-216" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-217"><a href="#cb83-217" aria-hidden="true" tabindex="-1"></a>teachers<span class="sc">$</span>hrwork <span class="ot">&lt;-</span> <span class="fu">replace</span>(teachers<span class="sc">$</span>hrwork, teachers<span class="sc">$</span>hrwork <span class="sc">&lt;</span> <span class="dv">0</span>, <span class="cn">NA</span>) </span>
+<span id="cb83-218"><a href="#cb83-218" aria-hidden="true" tabindex="-1"></a>teachers<span class="sc">$</span>size <span class="ot">&lt;-</span> <span class="fu">replace</span>(teachers<span class="sc">$</span>size, teachers<span class="sc">$</span>size <span class="sc">&lt;</span> <span class="dv">0</span>, <span class="cn">NA</span>) </span>
+<span id="cb83-219"><a href="#cb83-219" aria-hidden="true" tabindex="-1"></a>teachers<span class="sc">$</span>preprmin <span class="ot">&lt;-</span> <span class="fu">replace</span>(teachers<span class="sc">$</span>preprmin, teachers<span class="sc">$</span>perprmin <span class="sc">&lt;</span> <span class="dv">0</span>, <span class="cn">NA</span>) </span>
+<span id="cb83-220"><a href="#cb83-220" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(teachers, <span class="cf">function</span>(x) <span class="fu">sum</span>(<span class="fu">is.na</span>(x)))</span>
+<span id="cb83-221"><a href="#cb83-221" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-222"><a href="#cb83-222" aria-hidden="true" tabindex="-1"></a><span class="co"># For all columns in a dataset</span></span>
+<span id="cb83-223"><a href="#cb83-223" aria-hidden="true" tabindex="-1"></a>ex.data_imputed <span class="ot">&lt;-</span> teachers</span>
+<span id="cb83-224"><a href="#cb83-224" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(ex.data_imputed)) {</span>
+<span id="cb83-225"><a href="#cb83-225" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">is.numeric</span>(ex.data_imputed[[i]])) {</span>
+<span id="cb83-226"><a href="#cb83-226" aria-hidden="true" tabindex="-1"></a>    ex.data_imputed[[i]][<span class="fu">is.na</span>(ex.data_imputed[[i]])] <span class="ot">&lt;-</span> <span class="fu">mean</span>(ex.data_imputed[[i]], <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb83-227"><a href="#cb83-227" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb83-228"><a href="#cb83-228" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb83-229"><a href="#cb83-229" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-230"><a href="#cb83-230" aria-hidden="true" tabindex="-1"></a><span class="co"># Count missing values in each column</span></span>
+<span id="cb83-231"><a href="#cb83-231" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(ex.data_imputed, <span class="cf">function</span>(x) <span class="fu">sum</span>(<span class="fu">is.na</span>(x)))</span>
+<span id="cb83-232"><a href="#cb83-232" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-233"><a href="#cb83-233" aria-hidden="true" tabindex="-1"></a><span class="co"># Histograms of the data for each dataset, the respondents and nonrespondents</span></span>
+<span id="cb83-234"><a href="#cb83-234" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb83-235"><a href="#cb83-235" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachers<span class="sc">$</span>hrwork, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">60</span>))</span>
+<span id="cb83-236"><a href="#cb83-236" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachnr<span class="sc">$</span>hrwork, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">60</span>))</span>
+<span id="cb83-237"><a href="#cb83-237" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-238"><a href="#cb83-238" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb83-239"><a href="#cb83-239" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachers<span class="sc">$</span>preprmin, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">200</span>, <span class="dv">1000</span>))</span>
+<span id="cb83-240"><a href="#cb83-240" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachnr<span class="sc">$</span>preprmin, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">200</span>, <span class="dv">1000</span>))</span>
+<span id="cb83-241"><a href="#cb83-241" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-242"><a href="#cb83-242" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb83-243"><a href="#cb83-243" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachers<span class="sc">$</span>size, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">120</span>))</span>
+<span id="cb83-244"><a href="#cb83-244" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachnr<span class="sc">$</span>size, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">120</span>))</span>
+<span id="cb83-245"><a href="#cb83-245" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-246"><a href="#cb83-246" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb83-247"><a href="#cb83-247" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachers<span class="sc">$</span>assist, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">500</span>, <span class="dv">2000</span>))</span>
+<span id="cb83-248"><a href="#cb83-248" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(teachnr<span class="sc">$</span>assist, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">500</span>, <span class="dv">2000</span>))</span>
+<span id="cb83-249"><a href="#cb83-249" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-250"><a href="#cb83-250" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a contingency table</span></span>
+<span id="cb83-251"><a href="#cb83-251" aria-hidden="true" tabindex="-1"></a>contingency_table <span class="ot">&lt;-</span> <span class="fu">table</span>(comb.data<span class="sc">$</span>response, comb.data<span class="sc">$</span>size)</span>
+<span id="cb83-252"><a href="#cb83-252" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform the Chi-Square test</span></span>
+<span id="cb83-253"><a href="#cb83-253" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(contingency_table)   </span>
+<span id="cb83-254"><a href="#cb83-254" aria-hidden="true" tabindex="-1"></a><span class="co"># Use Fisher's test for small samples</span></span>
+<span id="cb83-255"><a href="#cb83-255" aria-hidden="true" tabindex="-1"></a><span class="fu">fisher.test</span>(comb.data<span class="sc">$</span>response, comb.data<span class="sc">$</span>size, <span class="at">simulate.p.value=</span><span class="cn">TRUE</span>)   </span>
+<span id="cb83-256"><a href="#cb83-256" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-257"><a href="#cb83-257" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a contingency table</span></span>
+<span id="cb83-258"><a href="#cb83-258" aria-hidden="true" tabindex="-1"></a>contingency_table <span class="ot">&lt;-</span> <span class="fu">table</span>(comb.data<span class="sc">$</span>response, comb.data<span class="sc">$</span>preprmin)</span>
+<span id="cb83-259"><a href="#cb83-259" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform the Chi-Square test</span></span>
+<span id="cb83-260"><a href="#cb83-260" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(contingency_table)   </span>
+<span id="cb83-261"><a href="#cb83-261" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-262"><a href="#cb83-262" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a contingency table</span></span>
+<span id="cb83-263"><a href="#cb83-263" aria-hidden="true" tabindex="-1"></a>contingency_table <span class="ot">&lt;-</span> <span class="fu">table</span>(comb.data<span class="sc">$</span>response, comb.data<span class="sc">$</span>assist)</span>
+<span id="cb83-264"><a href="#cb83-264" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform the Chi-Square test</span></span>
+<span id="cb83-265"><a href="#cb83-265" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(contingency_table)  </span>
+<span id="cb83-266"><a href="#cb83-266" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-267"><a href="#cb83-267" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachers<span class="sc">$</span>size)</span>
+<span id="cb83-268"><a href="#cb83-268" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachers<span class="sc">$</span>size)</span>
+<span id="cb83-269"><a href="#cb83-269" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachnr<span class="sc">$</span>size)</span>
+<span id="cb83-270"><a href="#cb83-270" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachnr<span class="sc">$</span>size)</span>
+<span id="cb83-271"><a href="#cb83-271" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-272"><a href="#cb83-272" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachers<span class="sc">$</span>preprmin)</span>
+<span id="cb83-273"><a href="#cb83-273" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachers<span class="sc">$</span>preprmin)</span>
+<span id="cb83-274"><a href="#cb83-274" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachnr<span class="sc">$</span>preprmin)</span>
+<span id="cb83-275"><a href="#cb83-275" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachnr<span class="sc">$</span>preprmin)</span>
+<span id="cb83-276"><a href="#cb83-276" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-277"><a href="#cb83-277" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachers<span class="sc">$</span>hrwork)</span>
+<span id="cb83-278"><a href="#cb83-278" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachers<span class="sc">$</span>hrwork)</span>
+<span id="cb83-279"><a href="#cb83-279" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachnr<span class="sc">$</span>hrwork)</span>
+<span id="cb83-280"><a href="#cb83-280" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachnr<span class="sc">$</span>hrwork)</span>
+<span id="cb83-281"><a href="#cb83-281" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-282"><a href="#cb83-282" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachers<span class="sc">$</span>assist)</span>
+<span id="cb83-283"><a href="#cb83-283" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachers<span class="sc">$</span>assist)</span>
+<span id="cb83-284"><a href="#cb83-284" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teachnr<span class="sc">$</span>assist)</span>
+<span id="cb83-285"><a href="#cb83-285" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(teachnr<span class="sc">$</span>assist)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 </section>
 </section>
 
