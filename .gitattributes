@@ -3,4 +3,4 @@
 
 # Recognize R in  qmd files
 *.qmd linguist-language=R
-*.html linguist-language=R
+*.html linguist-generated=true
