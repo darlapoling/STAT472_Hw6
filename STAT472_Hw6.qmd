@@ -146,6 +146,8 @@ If I were to design an experiment to test this conjecture, that it would be pref
 
 ```{r echo=FALSE}
 teachers <- read.table("~/Downloads/CSV data sets for SDA 3e/teachers.csv", header = TRUE, sep = ",") 
+
+
 ```
 
 **(a) The original survey was intended as a one-stage cluster sample. What was the overall response rate?**
@@ -179,8 +181,8 @@ comb.data$response <- factor(comb.data$response,
 
 # Histograms of the data for each dataset, the respondents and nonrespondents
 par(mfrow=c(1, 2))
-hist(teachers$hrwork, xlim=c(-10, 60))
-hist(teachnr$hrwork, xlim=c(-10, 60))
+hist(teachers$hrwork, xlim=c(-10, 60), main = "Required Hours at Work for Respondents")
+hist(teachnr$hrwork, xlim=c(-10, 60), main = "Required Hours at Work for Non-Respondents")
 
 par(mfrow=c(1, 2))
 hist(teachers$preprmin, xlim=c(-200, 1000))
