@@ -15,11 +15,6 @@
 
 ### Data Visualizations:
 
-![BMI vs age](STAT472_Hw6_files/figure-html/unnamed-chunk-5-1.png)
-Weighted bubble plot with smoothed trend line for BMI vs age from NHANES data.
-
-![Histogram of respondents vs non-respondents](STAT472_Hw6_files/figure-html/unnamed-chunk-8-1.png)
-
 | Data Visualization | Description |
 |---|---|
 |![BMI vs age](STAT472_Hw6_files/figure-html/unnamed-chunk-5-1.png)| Weighted bubble plot with smoothed trend line for BMI vs age from NHANES data.|
