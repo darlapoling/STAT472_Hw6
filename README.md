@@ -16,3 +16,5 @@ For this I used the following tools:
 Data Visualizations:
 
 ![BMI vs age](STAT472_Hw6_files/figure-html/unnamed-chunk-5-1.png)
+
+![Histogram of respondents vs non-respondents](STAT472_Hw6_files/figure-html/unnamed-chunk-8-1.png)
