@@ -15,4 +15,4 @@ For this I used the following tools:
 
 Data Visualizations:
 
-![BMI vs age](BMI%20vs%20age.png)
+![BMI vs age](STAT472_Hw6_files/figure-html/unnamed-chunk-5-1.png)
