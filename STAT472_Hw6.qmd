@@ -181,8 +181,8 @@ comb.data$response <- factor(comb.data$response,
 
 # Histograms of the data for each dataset, the respondents and nonrespondents
 par(mfrow=c(1, 2))
-hist(teachers$hrwork, xlim=c(-10, 60), main = "Required Hours at Work for Respondents")
-hist(teachnr$hrwork, xlim=c(-10, 60), main = "Required Hours at Work for Non-Respondents")
+hist(teachers$hrwork, xlim=c(-10, 60), main = "Req. Work Hours: Respondents")
+hist(teachnr$hrwork, xlim=c(-10, 60), main = "Req. Work Hours: Non-Respondents")
 
 par(mfrow=c(1, 2))
 hist(teachers$preprmin, xlim=c(-200, 1000))
